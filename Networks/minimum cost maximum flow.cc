@@ -5,7 +5,7 @@ struct Edge {
   int from, to, cap, cost, flow;
   Edge( ) { }
   Edge( int from, int to, int cap, int cost, int flow ) : 
-  from(from), to(to), cost( cost ), cap( cap ), flow( flow ) { }
+  from(from), to(to), cap(cap), cost(cost), flow(flow) { }
 };
 
 struct Network {
@@ -14,8 +14,7 @@ struct Network {
   vector< vi > graph;
   vi pred, dist, phi;
 
-  Network( int n ) : 
-    n( n ), graph( n ), pred( n ), dist( n ), phi( n ) { }
+  Network( int n ) : n(n), graph(n), pred(n), dist(n), phi(n) { }
 
   void add_edge( int from, int to, int cap, int cost ) {
     graph[ from ].PB( SIZE( edge ) );

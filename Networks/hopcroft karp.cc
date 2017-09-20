@@ -3,12 +3,12 @@
  */
 struct MBM {
   int n1, n2, edges;
-  vi last, prev, head, matching, dist, q;
+  vi last, prev, head, matching, dist;
   vb used, seen;
 
   MBM( ) :
   last(MAXN1), prev(MAXM), head(MAXM), matching(MAXN2), 
-  dist(MAXN1), q(MAXN1), used(MAXN1), seen(MAXN1) { }
+  dist(MAXN1), used(MAXN1), seen(MAXN1) { }
 
   void init( int n1, int n2 ) {
     this->n1 = n1; this->n2 = n2;
@@ -22,20 +22,20 @@ struct MBM {
   }
   void bfs( ) {
     fill( dist.begin(), dist.begin()+n1, -1 );
-    int size_q = 0;
+    queue< int > q;
     for( int u = 0; u < n1; u++ ) {
-      if( !used[ u ] ) {
-        q[ size_q++ ] = u;
+      if( !used[u] ) {
+        q.push( u );
         dist[ u ] = 0;
       }
     }
-    for( int i = 0; i < size_q; i++ ) {
-      int u1 = q[ i ];
+    while( !q.empty() ) {
+      int u1 = q.front(); q.pop();
       for( int e = last[u1]; e >= 0; e = prev[e] ) {
         int u2 = matching[ head[e] ];
         if( u2 >= 0 && dist[u2] < 0 ) {
           dist[ u2 ] = dist[u1]+1;
-          q[ size_q++ ] = u2;
+          q.push( u2 );
         }
       }
     }

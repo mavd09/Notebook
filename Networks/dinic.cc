@@ -29,10 +29,10 @@ struct Network {
     while( !q.empty( ) && dist[ t ] == -1 ) {
       int u = q.front( ); q.pop( );
       for( int i = 0; i < SIZE( graph[u] ); ++i ) {
-        int id = graph[ u ][ i ], v = edges[ id ].to;
-        if( dist[ v ] == -1 && edges[ id ].flow < edges[ id ].cap ) {
+        int id = graph[u][i], v = edges[id].to;
+        if( dist[ v ] == -1 && edges[id].flow < edges[id].cap ) {
           q.push( v );
-          dist[ v ] = dist[ u ]+1;
+          dist[ v ] = dist[u]+1;
         }
       }
     }
@@ -41,8 +41,8 @@ struct Network {
   int dfs( int u, int t, int flow ) {
     if( !flow ) return 0;
     if( u == t ) return flow;
-    for( ; ptr[ u ] < SIZE( graph[u] ); ++ptr[ u ] ) {
-      int id = graph[ u ][ ptr[u] ], v = edges[ id ].to;
+    for( ; ptr[u] < SIZE( graph[u] ); ++ptr[u] ) {
+      int id = graph[u][ ptr[u] ], v = edges[id].to;
       if( dist[ v ] != dist[ u ]+1 ) continue;
       int pushed = dfs( v, t, min( flow, edges[id].cap-edges[id].flow ) );
       if( pushed ) {
