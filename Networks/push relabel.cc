@@ -1,17 +1,17 @@
-/* 
- * push relabel ( O( |V|^3 ) )
+/*
+ * O( |v|^3 )
  */
 struct Edge {
   int from, to, cap, flow, index;
   Edge( int from, int to, int cap, int flow, int index ) :
-  from( from ), to( to ), cap( cap ), flow( flow ), index( index ) { }
+  from(from), to(to), cap(cap), flow(flow), index(index) { }
 };
 
 struct Network {
   int n;
-  vector< vector< Edge > > graph;
-  vector< ll > excess;
-  vector< int > dist, active, count;
+  vector< vector<Edge> > graph;
+  vll excess;
+  vi dist, active, count;
   queue< int > q;
   
   Network( int n ) : n( n ), graph( n ), excess( n ), dist( n ), active( n ), count( 2*n ) { }
