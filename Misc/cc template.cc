@@ -26,21 +26,14 @@ const int MAXN = int( 1e5 )+10;
 const int MOD  = int( 1e9 )+7;
 const int oo   = INT_MAX;
 
-
-
 int main( ) {
 
 #ifdef LOCAL
   freopen( "input", "r", stdin );
-  //freopen( "output", "w", stdout );
 #else
-  //freopen( ".in", "r", stdin );
-  //freopen( ".out", "w", stdout );
   ios_base::sync_with_stdio( 0 );
   cin.tie( 0 );
 #endif
-
-
 
   return 0;
 }
