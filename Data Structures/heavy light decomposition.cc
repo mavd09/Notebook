@@ -1,100 +1,60 @@
-struct Edge { int v, c, idx; };
+/*
+ * idx must be equal to 0
+ * hld_child and hld_root must be initialized with -1
+ * define a new data type called 'data' and overload + operator
+ */
 
-int n;
-vector< Edge > graph[ MAXN ];
-int base_array[ MAXN ], ptr;
-int n_chain, chain_ind[ MAXN ], chain_head[ MAXN ], pos_base[ MAXN ];
-int depth[ MAXN ], dp[ LOG2 ][ MAXN ], other_end[ MAXN ], subsize[ MAXN ];
-int st[ MAXN*4 ];
+int idx;
+int sz[ MAXN ], hld_child[ MAXN ], hld_index[ MAXN ], hld_root[ MAXN ];
 
-void init( ) {
-  n_chain = ptr = 0;
-  for( int i = 0; i < n; ++i ) {
-    graph[i].clear();
-    chain_head[i] = -1;
-    for( int j = 0; j < LOG2; ++j ) {
-      dp[j][i] = -1;
+void dfs( int u, int p = 0 ) {
+  sz[u] = 1;
+  jump[0][u] = p;
+  for( auto& v : graph[u] ) {
+    if( v == p ) continue;
+    depth[v] = depth[u]+1;
+    dfs(v, u);
+    sz[u] += sz[v];
+    if( hld_child[u] == -1 || sz[hld_child[u]] < sz[v] ) {
+      hld_child[u] = v;
     }
   }
 }
 
-void make_tree( int node, int s, int e );
-void update_tree( int node, int s, int e, int x, int val );
-int query_tree( int node, int s, int e, int l, int r );
-void create_LCA( );
-int LCA( int u, int v );
-
-int query_up(int u, int v) {
-  if( u == v ) return 0;
-  int uchain, vchain = chain_ind[v], ans = -1;
-  while( true ) {
-    uchain = chain_ind[u];
-    if( uchain == vchain ) {
-      if( u != v ) {
-        ans = max( ans, query_tree( 1, 0, n-1, pos_base[v]+1, pos_base[u] ) );
-      }
-      return ans;
-    }
-    ans = max( ans, query_tree( 1, 0, n-1, pos_base[ chain_head[uchain] ], pos_base[u] ) );
-    u = chain_head[uchain];
-    u = dp[0][u];
+void build_hld( int u, int p = 0 ) {
+  hld_index[u] = idx++;
+  narr[hld_index[u]] = arr[u];
+  if( hld_root[u] == -1 ) {
+    hld_root[u] = u;
   }
-  return -1;
-}
-
-int query( int u, int v ) {
-  int lca = LCA( u, v );
-  return max( query_up( u, lca ), query_up( v, lca ) );
-}
-
-void change( int i, int val ) {
-  int u = other_end[i];
-  update_tree( 1, 0, n-1, pos_base[u], val );
-}
-
-void HLD( int u, int p = -1, int c = -1 ) {
-  if( chain_head[n_chain] == -1 ) {
-    chain_head[n_chain] = u;
+  if( hld_child[u] != -1 ) {
+    hld_root[hld_child[u]] = hld_root[u];
+    build_hld(hld_child[u], u);
   }
-  chain_ind[u] = n_chain;
-  pos_base[u] = ptr;
-  base_array[ptr++] = c;
-  int child = -1, ncost;
-  for( int i = 0; i < SIZE(graph[u]); ++i ) {
-    Edge& e = graph[u][i];
-    if( e.v == p ) continue;
-    if( child == -1 || subsize[child] < subsize[e.v] ) {
-      child = e.v;
-      ncost = e.c;
-    }
-  }
-  if( child != -1 ) {
-    HLD( child, u, ncost );
-  }
-  for( int i = 0; i < SIZE(graph[u]); ++i ) {
-    Edge& e = graph[u][i];
-    if( e.v == p || e.v == child ) continue;
-    n_chain++;
-    HLD( e.v, u, e.c );
+  for( auto& v : graph[u] ) {
+    if( v == p || v == hld_child[u] ) continue;
+    build_hld(v, u);
   }
 }
 
-void dfs( int u, int p = -1 ) {
-  dp[0][u] = p;
-  depth[u] = ( p == -1 ? 0 : depth[p]+1 );
-  subsize[u] = 1;
-  for( int i = 0; i < SIZE(graph[u]); ++i ) {
-    Edge& e = graph[u][i];
-    if( e.v == p ) continue;
-    other_end[ e.idx ] = e.v;
-    dfs( e.v, u );
-    subsize[u] += subsize[e.v];
-  }
+void update_hld( int u, int val ) {
+  update_tree(hld_index[u], val);
 }
 
-void create_HLD( ) {
-  dfs( 0 );
-  HLD( 0 );
-  make_tree( 1, 0, n-1 );
-  create_LCA( );
+data query_hld( int u, int v ) {
+  data val = NULL_DATA;
+  while( hld_root[u] != hld_root[v] ) {
+    if( depth[hld_root[u]] < depth[hld_root[v]] ) swap(u, v);
+    val = val+query_tree(hld_index[hld_root[u]], hld_index[u]);
+    u = jump[0][hld_root[u]];
+  }
+  if( depth[u] > depth[v] ) swap(u, v);
+  val = val+query_tree(hld_index[u], hld_index[v]);
+  return val;
+}
+
+void build() {
+  dfs(0);
+  build_hld(0);
+  build_tree();
 }
