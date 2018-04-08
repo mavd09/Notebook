@@ -4,22 +4,15 @@ struct node {
   node *l, *r;
   node( int k ) : k( k ), p( rand() ), cnt( 1 ), rvs( false ), l( NULL ), r( NULL ) {}
 };
-
 typedef node* pnode;
-
 int cnt( pnode &t ) {
-  if( !t ) {
-    return 0;
-  }
+  if( !t ) return 0;
   return t->cnt;
 }
-
 void upd_cnt( pnode &t ) {
-  if( t ) {
+  if( t )
     t->cnt = 1 + cnt( t->l ) + cnt( t->r );
-  }
 }
-
 void push( pnode &t ) {
   if( t && t->rvs ) {
     t->rvs = false;
@@ -28,7 +21,6 @@ void push( pnode &t ) {
     if( t->r != NULL ) t->r->rvs ^= true;
   }
 }
-
 void merge( pnode &t, pnode left, pnode right ) {
   push( left ); push( right );
   if( !left || !right ) {
@@ -38,14 +30,12 @@ void merge( pnode &t, pnode left, pnode right ) {
   if( left->p > right->p ) {
     merge( left->r, left->r, right );
     t = left;
-  }
-  else {
+  } else {
     merge( right->l, left, right->l );
     t = right;
   }
   upd_cnt( t );
 }
-
 void split( pnode t, int k, pnode &left, pnode &right, int add = 0 ) {
   if( !t ) {
     left = right = NULL;
@@ -56,14 +46,12 @@ void split( pnode t, int k, pnode &left, pnode &right, int add = 0 ) {
   if( cur_key < k ) {
     split( t->r, k, t->r, right, add + 1 + cnt( t->l ) );
     left = t;
-  }
-  else {
+  } else {
     split( t->l, k, left, t->l, add );
     right = t;
   }
   upd_cnt( t );
 }
-
 void insert( pnode &t, int idx, int k ) {
   pnode new_node = new node( k );
   if( !t ) {
@@ -76,20 +64,11 @@ void insert( pnode &t, int idx, int k ) {
   merge( t, left, right );
   upd_cnt( t );
 }
-
 void erase( pnode &t, int k ) {
-  if( !t ) {
-    return;
-  }
+  if( !t ) return;
   push( t );
-  if( t->k == k ) {
-    merge( t, t->l, t->r );
-  }
-  else if( t->k < k ) {
-    erase( t->r, k );
-  }
-  else {
-    erase( t->l, k );
-  }
+  if( t->k == k ) merge( t, t->l, t->r );
+  else if( t->k < k ) erase( t->r, k );
+  else erase( t->l, k );
   upd_cnt( t );
 }

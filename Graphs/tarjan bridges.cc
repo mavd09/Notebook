@@ -8,19 +8,11 @@ void dfs( int u, int p = -1 ) {
       dfs( v, u );
       low[ u ] = min( low[u], low[v] );
       ///Bridges
-      if( low[v] > dfn[u] ) {
-        cout << u << " " << v << endl;
-      }
+      if( low[v] > dfn[u] ) cout<<u<<v;
       ///Articulation points
-      if( p == -1 && children > 1 ) {
-        ap[ u ] = true;
-      }
-      if( p != -1 && low[v] >= dfn[u] ) {
-        ap[ u ] = true;
-      }
+      if( p == -1 && children > 1 ) ap[ u ] = true;
+      if( p != -1 && low[v] >= dfn[u] ) ap[ u ] = true;
     }
-    else if( v != p ) {
-      low[ u ] = min( low[u], dfn[v] );
-    }
+    else if( v != p ) low[ u ] = min( low[u], dfn[v] );
   }
 }

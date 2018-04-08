@@ -1,7 +1,4 @@
-lf f( lf x );
-
 inline double simpson(double fl,double fr,double fmid,double l,double r) { return (fl+fr+4.0*fmid)*(r-l)/6.0; }
-
 double rsimpson(double slr,double fl,double fr,double fmid,double l,double r) {
 	double mid = (l+r)*0.5;
 	double fml = f((l+mid)*0.5);
@@ -11,7 +8,6 @@ double rsimpson(double slr,double fl,double fr,double fmid,double l,double r) {
 	if(fabs(slr-slm-smr) < EPS) return slm+smr;
 	return rsimpson(slm,fl,fmid,fml,l,mid)+rsimpson(smr,fmid,fr,fmr,mid,r);
 }
-
 double integrate(double l,double r) {
 	double mid = (l+r)*0.5;
 	double fl = f(l);

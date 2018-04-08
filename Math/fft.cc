@@ -1,19 +1,11 @@
 const lf PI = acos( -1.0 );
-
 struct cp { lf r, i; };
-
 cp operator + ( const cp& a, const cp& b ) { return { a.r+b.r, a.i+b.i }; }
 cp operator - ( const cp& a, const cp& b ) { return { a.r-b.r, a.i-b.i }; }
 cp operator * ( const cp& a, const cp& b ) { return { a.r*b.r-a.i*b.i, a.r*b.i+a.i*b.r }; }
 cp operator * ( const cp& a, lf x ) { return { a.r*x, a.i*x }; }
 cp operator * ( lf x, const cp& a ) { return { a.r*x, a.i*x }; }
 cp operator / ( const cp& a, lf x ) { return { a.r/x, a.i/x }; }
-
-ostream& operator << ( ostream& out, const cp& c ) {
-  out << c.r;
-  return out;
-}
-
 void rev( cp* a, int n ) {
   int i, j, k;
   for( i = 1, j = n>>1; i < n-1; ++i ) {
@@ -22,7 +14,6 @@ void rev( cp* a, int n ) {
     j += k;
   }
 }
-
 void dft( cp* a, int n, int flag = 1 ) {
   rev( a, n );
   for( int m = 2; m <= n; m <<= 1 ) {
@@ -37,16 +28,11 @@ void dft( cp* a, int n, int flag = 1 ) {
     }
   }
 }
-
 void mul( int na, cp* a, int nb, cp* b ) {
   int n = 1;
   while( n <= na+nb+1 ) n <<= 1;
   dft( a, n ); dft( b, n );
-  for( int i = 0; i < n; ++i ) {
-    a[ i ] = a[ i ]*b[ i ];
-  }
+  for( int i = 0; i < n; ++i ) a[ i ] = a[ i ]*b[ i ];
   dft( a, n, -1 );
-  for( int i = 0; i < n; ++i ) {
-    a[ i ].r = round( a[ i ].r/lf(n) );
-  }
+  for( int i = 0; i < n; ++i ) a[ i ].r = round( a[ i ].r/lf(n) );
 }

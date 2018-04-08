@@ -1,21 +1,15 @@
-/*
- * O( ? )
- */
 struct Edge { 
   int from, to, cap, cost, flow;
   Edge( ) { }
   Edge( int from, int to, int cap, int cost, int flow ) : 
-  from(from), to(to), cap(cap), cost(cost), flow(flow) { }
+    from(from), to(to), cap(cap), cost(cost), flow(flow) { }
 };
-
 struct Network {
   int n;
   vector< Edge > edge;
   vector< vi > graph;
   vi pred, dist, phi;
-
   Network( int n ) : n(n), graph(n), pred(n), dist(n), phi(n) { }
-
   void add_edge( int from, int to, int cap, int cost ) {
     graph[ from ].PB( SIZE( edge ) );
     edge.PB( Edge( from, to, cap, cost, 0 ) );
@@ -40,9 +34,8 @@ struct Network {
         }
       }
     }
-    for( int i = 0; i < n; i++ ) {
+    for( int i = 0; i < n; i++ )
       phi[ i ] = min( oo, phi[i]+dist[i] );
-    }
     return ( dist[t] != oo );
   }
   pair< ll, ll > max_flow( int s, int t ) {
@@ -50,9 +43,8 @@ struct Network {
     fill( ALL(phi), 0 );
     while( dijkstra( s, t ) ) {
       int flow = oo;
-      for( int v = pred[t]; v != -1; v = pred[ edge[v].from ] ) {
+      for( int v = pred[t]; v != -1; v = pred[ edge[v].from ] )
         flow = min( flow, edge[v].cap-edge[v].flow );
-      }
       for( int v = pred[t]; v != -1; v = pred[ edge[v].from ] ) {
         Edge& e1 = edge[ v ];
         Edge& e2 = edge[ v^1 ];

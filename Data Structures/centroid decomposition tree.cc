@@ -1,6 +1,5 @@
 int pr[ MAXN ], sz[ MAXN ];
 bool cent[ MAXN ];
-
 void dfs_sz( int u, int p = -1 ) {
   sz[u] = 1;
   for( auto& v : graph[u] ) {
@@ -9,7 +8,6 @@ void dfs_sz( int u, int p = -1 ) {
     sz[u] += sz[v];
   }
 }
-
 int find_cent( int u ) {
   for( int t = sz[u]/2, p; ; ) {
     bool ok = true;
@@ -25,7 +23,6 @@ int find_cent( int u ) {
   }
   return -1;
 }
-
 void decompose( int u, int p = -1 ) {
   dfs_sz( u );
   int c = find_cent( u );

@@ -2,7 +2,6 @@
  * O( n ) where n = |text|
  * Returns a vector with size equal to 2*|text|. For each i in such vector, p[ i ] is equal to the maximum palindrome centered at this position. 
  */
-
 vi manacher( string t ) {
   int len = SIZE( t );
   vi p( 2*len );
@@ -18,10 +17,7 @@ vi manacher( string t ) {
       l--; r++;
     }
     int ri = p[ i ] ? ((i+p[ i ])>>1)<<1 : i;
-    if( ri > R ) {
-      C = i;
-      R = ri;
-    }
+    if( ri > R ) C = i, R = ri;
   }
   return p;
 }

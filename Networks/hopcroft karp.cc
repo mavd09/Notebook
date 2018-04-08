@@ -5,11 +5,9 @@ struct MBM {
   int n1, n2, edges;
   vi last, prev, head, matching, dist;
   vb used, seen;
-
   MBM( ) :
-  last(MAXN1), prev(MAXM), head(MAXM), matching(MAXN2), 
-  dist(MAXN1), used(MAXN1), seen(MAXN1) { }
-
+    last(MAXN1), prev(MAXM), head(MAXM), matching(MAXN2), 
+    dist(MAXN1), used(MAXN1), seen(MAXN1) { }
   void init( int n1, int n2 ) {
     this->n1 = n1; this->n2 = n2;
     edges = 0;
@@ -61,14 +59,10 @@ struct MBM {
       bfs( );
       fill( seen.begin(), seen.begin()+n1, false );
       int f = 0;
-      for( int u = 0; u < n1; u++ ) {
-        if( !used[ u ] && dfs( u ) ) {
+      for( int u = 0; u < n1; u++ )
+        if( !used[ u ] && dfs( u ) )
           f++;
-        }
-      }
-      if( f == 0 ) {
-        return ans;
-      }
+      if( f == 0 ) return ans;
       ans += f;
     }
     return 0;

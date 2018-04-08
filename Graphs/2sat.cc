@@ -9,27 +9,19 @@ struct SAT {
   vb seen, value;
   stack< int > st;
   SAT( int n ) : n( n ), graph( 2, vector< vi >( 2*n ) ), tag( 2*n ), seen( 2*n ), value( 2*n ) { }
-  int neg( int x ) {
-    return 2*n-x-1;
-  }
+  int neg( int x ) { return 2*n-x-1; }
   ///We give u v v and it makes ¬u -> v and ¬v -> u
   void make_implication( int u, int v ) {
     implication( neg(u), v );
     implication( neg(v), u );
   }
-  void make_true( int u ) {
-    add_edge( neg(u), u );
-  }
-  void make_false( int u ) {
-    make_true( neg(u) );
-  }
+  void make_true( int u ) { add_edge( neg(u), u ); }
+  void make_false( int u ) { make_true( neg(u) ); }
   void eq( int u, int v ) {
     implication( u, v );
     implication( v, u );
   }
-  void diff( int u, int v ) {
-    eq( u, neg(v) );
-  }
+  void diff( int u, int v ) { eq( u, neg(v) ); }
   void implication( int u, int v ) {
     add_edge( u, v );
     add_edge( neg(v), neg(u) );
@@ -43,24 +35,19 @@ struct SAT {
     for( auto& v : graph[ id ][ u ] )
       if( !seen[ v ] )
         dfs( id, v, t );
-    if( id == 0 )
-      st.push( u );
-    else
-      tag[ u ] = t;
+    if( id == 0 ) st.push( u );
+    else tag[ u ] = t;
   }
   void kosaraju( ) {
     for( int u = 0; u < n; u++ ) {
-      if( !seen[ u ] )
-        dfs( 0, u );
-      if( !seen[ neg(u) ] )
-        dfs( 0, neg(u) );
+      if( !seen[ u ] ) dfs( 0, u );
+      if( !seen[ neg(u) ] ) dfs( 0, neg(u) );
     }
     fill( seen.begin( ), seen.end( ), false );
     int t = 0;
     while( !st.empty( ) ) {
       int u = st.top( ); st.pop( );
-      if( !seen[ u ] )
-        dfs( 1, u, t++ );
+      if( !seen[ u ] ) dfs( 1, u, t++ );
     }
   }
   bool satisfiable( ) {

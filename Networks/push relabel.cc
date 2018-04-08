@@ -6,16 +6,13 @@ struct Edge {
   Edge( int from, int to, int cap, int flow, int index ) :
   from(from), to(to), cap(cap), flow(flow), index(index) { }
 };
-
 struct Network {
   int n;
   vector< vector<Edge> > graph;
   vll excess;
   vi dist, active, count;
-  queue< int > q;
-  
-  Network( int n ) : n(n), graph(n), excess(n), dist(n), active(n), count(2*n) { }
-  
+  queue< int > q; 
+  Network( int n ) : n(n), graph(n), excess(n), dist(n), active(n), count(2*n) {}
   void add_edge( int from, int to, int cap ) {
     graph[ from ].PB( Edge( from, to, cap, 0, SIZE( graph[to] ) ) );
     if( from == to ) graph[ from ].back( ).index++;
@@ -58,10 +55,8 @@ struct Network {
     for( int i = 0; excess[v] > 0 && i < SIZE( graph[v] ); i++ )
       push( graph[v][i] );
     if( excess[v] > 0 ) {
-      if( count[ dist[v] ] == 1 )
-        gap( dist[v] );
-      else
-        relabel( v );
+      if( count[ dist[v] ] == 1 ) gap( dist[v] );
+      else relabel( v );
     }
   }
   ll max_flow( int s, int t ) {

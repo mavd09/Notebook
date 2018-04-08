@@ -8,11 +8,9 @@ bool cmp_edge( const Edge &e1, const Edge &e2 ) {
 bool ok[ MAXN ];
 ll get_flow( int s, int t ) {
   Network netw( n );
-  for( int i = 0; i < m; ++i ) {
-    if( !ok[ edges[i].index ] ) {
+  for( int i = 0; i < m; ++i )
+    if( !ok[ edges[i].index ] )
       netw.add_edge( edges[i].from, edges[i].to, edges[i].cap );
-    }
-  }
   return netw.max_flow( s, t );
 }
 vi min_cut( int s, int t ) {

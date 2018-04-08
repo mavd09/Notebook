@@ -1,12 +1,10 @@
 namespace BlockCutTree {
-
   int t, rootCh, typeCnt;
   int low[ MAX ], dfn[ MAX ], type[ MAX ];
   vi graph[ MAX ];
   bool cut[ MAX ];
   map< pii, int > bridges;
   stack< int > s;
-
   void init( ) {
     t = rootCh = typeCnt = 0;
     bridges.clear( );
@@ -16,11 +14,9 @@ namespace BlockCutTree {
       graph[ i ].clear( );
     }
   }
-
   void add_edge( int u, int v ) {
     graph[ u ].push_back( v );
   }
-  
   void tarjan( int u, int fu ) {
     low[ u ] = dfn[ u ] = ++t;
     for( auto& v : graph[ u ] ) {
@@ -53,7 +49,6 @@ namespace BlockCutTree {
       else low[ u ] = min( low[ u ], dfn[ v ] );
     }
   }
-  
   void create_block_cut_tree( ) {
     LowestCommonAncestor::init( );
     tarjan( 1, 1 );
@@ -64,5 +59,4 @@ namespace BlockCutTree {
     LowestCommonAncestor::dfs( type[ 1 ], type[ 1 ] );
     LowestCommonAncestor::build_sparse_table( );
   }
-
 }

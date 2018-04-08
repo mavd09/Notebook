@@ -4,7 +4,6 @@
  * To optimize for maximum y-value, call the constructor with query_max = true.
  * Reference: https://github.com/alxli
  */
-
 class hull_optimizer {
   struct line {
     ll m, b, val;
@@ -29,11 +28,9 @@ class hull_optimizer {
       return m < l.m;
     }
   };
-
   set< line > hull;
   bool query_max;
   typedef set<line>::iterator hulliter;
-
   bool has_prev( hulliter it )const {
     return it != hull.begin( );
   }
@@ -41,9 +38,7 @@ class hull_optimizer {
     return ( it != hull.end( ) ) && ( ++it != hull.end( ) );
   }
   bool irrelevant( hulliter it )const {
-    if( !has_prev( it ) || !has_next( it ) ) {
-      return false;
-    }
+    if( !has_prev( it ) || !has_next( it ) ) return false;
     hulliter prev = it, next = it;
     --prev;
     ++next;
@@ -61,7 +56,6 @@ class hull_optimizer {
     hull.erase(it++);
     return hull.insert( it, l );
   }
-
  public:
   hull_optimizer( bool query_max = false ) {
     this->query_max = query_max;
@@ -81,26 +75,16 @@ class hull_optimizer {
       hull.erase(it);
       return;
     }
-    while( has_prev( it ) && irrelevant( --it ) ) {
-      hull.erase( it++ );
-    }
-    while( has_next( it ) && irrelevant( ++it ) ) {
-      hull.erase( it-- );
-    }
+    while( has_prev( it ) && irrelevant( --it ) ) hull.erase( it++ );
+    while( has_next( it ) && irrelevant( ++it ) ) hull.erase( it-- );
     it = update_left_border( it );
-    if( has_prev( it ) ) {
-      update_left_border( --it );
-    }
-    if( has_next( ++it ) ) {
-      update_left_border( ++it );
-    }
+    if( has_prev( it ) ) update_left_border( --it );
+    if( has_next( ++it ) ) update_left_border( ++it );
   }
   ll get_best( ll x )const {
     line q( 0, 0, x, true, query_max );
     hulliter it = hull.lower_bound( q );
-    if( query_max ) {
-      --it;
-    }
+    if( query_max ) --it;
     return it->m*x + it->b;
   }
 };
